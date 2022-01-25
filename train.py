@@ -12,30 +12,37 @@ if __name__ == '__main__':
     data_folder = args.data
     parameter_folder = args.parameters
     
+    basic_loader = ParamsLoader(parameter_folder)
     #parse the parameters of the genetic algorithm
-    gens_num, gen_size, model_type, participants, metrics, n_metrics, lca_model = GA_ParamsLoader(parameter_folder).load()
-    #parse static (fixed) parameters of the SLCA
-    dt_t, threshold, trial_length, n_trials = SLCA_StaticParamsLoader(parameter_folder).load()
+    gens_num, gen_size, model_type, participants, metrics, n_metrics, lca_model = GA_ParamsLoader(parameter_folder).load('ga_parameters')
+    #parameters of simulation
+    trial_length, n_trials, desired_res = basic_loader.load('slca_parameters_sim').values()
+    data = DataLoader(data_folder, desired_res)
     #parse the parameters range of the SLCA
-    params_range = SLCA_ParamsRangeLoader(parameter_folder).load()
-    #parse the initial parameters of the SLCA
-    params_init = SLCA_ParamsInitLoader(parameter_folder, model_type).load()
+    params_range = SLCA_ParamsRangeLoader(parameter_folder).load('slca_parameters_range')
     
-    data = DataLoader(data_folder)
+    #parse the initial parameters of the SLCA
+    params_init = SLCA_ParamsInitLoader(parameter_folder).load('slca_parameters_init')
+    #parse fixed parameters of the SLCA
+    fixed_parameters = SLCA_ParamsFixedLoader(parameter_folder).load('slca_parameters_fixed')
     
     #initialize the genetic algorithm
-    ga = GA(gen_size=gen_size, n_trials=n_trials, trial_length=trial_length, dt_t=dt_t, threshold=threshold, params_range=params_range, 
-            data=data, participants=participants, metrics=metrics, n_metrics=n_metrics, lca_model=lca_model)
+    ga = GA(gen_size=gen_size, params_range=params_range, fixed=fixed_parameters,
+            param_to_index=basic_loader.all_params, index_to_param={v:k for k,v in basic_loader.all_params.items()},
+            data=data, participants=participants, metrics=metrics, n_metrics=n_metrics, lca_model=lca_model,
+            trial_length=trial_length, n_trials=n_trials)
     #initial parameter sets
-    params = np.zeros(shape=(gens_num, gen_size, params_init.shape[1]))
+    params = np.zeros(shape=(gens_num, gen_size, len(params_range)))
     params[0] = ga.first_gen()
-    params[0][:len(params_init)] = params_init
+    
+    for i, param_set in enumerate(params_init):
+        params[0, i, list(param_set.keys())] = list(param_set.values())
                 
     #start optimization
     for g in range(1, gens_num):
         print(f'GENERATION {g}/{gens_num}')
         try:
-            params[g] = ga.next_gen(g, params[g - 1])
+            params[g] = ga.next_gen(g, params[g-1])
             print(f'GENERATION {g} RES {list(params[g])}')
         except Exception as e:
             print("!!! Exception", str(e))

@@ -16,7 +16,7 @@ class SLCA():
     """
     def __init__(
             self, stimulus, dt_t=0.01, leak=0.2, competition=0, self_excit=0,
-            w_input=1, w_cross=0, offset=0, noise_sd=0, threshold=1):
+            w_input=1, w_cross=0, offset=0, noise_sd=0, threshold=5.0):
         """
         Initialize a leaky competing accumulator.
         
@@ -29,9 +29,9 @@ class SLCA():
         leak : float
             the leak term
         competition : float
-            the lateral inhibition across accumulators (i vs. j)
+            lateral inhibition across accumulators (i vs. j)
         self_excit : float
-            the self excitation of a accumulator (i vs. i)
+            self excitation of the accumulator (i vs. i)
         w_input : float
             input strengh of the feedforward weights
         w_cross : float

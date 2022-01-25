@@ -17,9 +17,8 @@ class GA():
     """
     The genetic algorithm class
     """
-    def __init__(self, data, participants, metrics, n_metrics, lca_model, params_range,
-                 gen_size=12, n_trials=40, trial_length=750, dt_t=0.01, threshold=5.0, 
-                 ):
+    def __init__(self, data, participants, metrics, n_metrics, lca_model, n_trials, trial_length, 
+                 param_to_index, index_to_param, params_range, fixed, gen_size=12):
         """
         Parameters
         ----------
@@ -35,12 +34,14 @@ class GA():
             number of trials in the single data simulation
         trial_length : int
             duration of a single trial
-        dt_t : float
-            the dt / tao term, representing the time step size for the data simulation
-        threshold : float
-            the activation threshold   for the data simulation
+        param_to_index : dict
+            a dictionary for mapping the parameter names to the indices
+        index_to_param : dict
+            a dictionary for reverse mapping the indices to the parameter names
         params_range
-            a list or tuple with the parameters range for the data simulation 
+            a list or tuple with the parameters range for the data simulation
+        fixed
+            fixed parameters with indices
         data
             object of the class DataLoaser with all rt and coordinates data loaded 
             path to the dictionary with human fixation times data by images and participants
@@ -50,16 +51,21 @@ class GA():
         self.metric_spatial = metrics['spatial']
         self.metric_temporal = metrics['temporal']
         self.n_metrics = n_metrics
+        
         self.gen_size = gen_size
         self.n_desc = int(gen_size / 4)
         self.participants = participants
         self.lca_model = lca_model       
+        
+        self.params_range = params_range
+        self.fixed = fixed
+        self.unfixed_inds =tuple(set(range(len(self.params_range))) - set(fixed.keys()))
+        self.param_to_index = param_to_index
+        self.index_to_param = index_to_param
+        
+        self.data = data
         self.n_trials = n_trials
         self.trial_length = trial_length
-        self.dt_t = dt_t
-        self.threshold = threshold
-        self.params_range = params_range
-        self.data = data
 
     def calculate_fitness(self, parameters):
         """
@@ -78,15 +84,17 @@ class GA():
         #iterate over stimulus images
         for stim in list(self.data.stim.keys()):
             salient = self.data.stim[stim]['salient']
-
-            threshold = self.threshold + salient * parameters[7]
-            print('new thresh ' + str(threshold))
+            
+            parameters = {self.index_to_param[i]: v for i, v in enumerate(parameters)}
+            parameters["threshold"] = parameters["base_threshold"] + salient * parameters["threshold_change"]
+            print("new threshold", parameters["threshold"])
 
             #initialize an SLCA model
-            lca = self.lca_model(stimulus=self.data.stim[stim]['map'], dt_t=self.dt_t, leak=parameters[0], competition=parameters[1], self_excit=parameters[2], w_input=parameters[3], w_cross=parameters[4], offset=parameters[5], noise_sd=parameters[6], threshold=threshold)
-                            
+            lca = self.lca_model(stimulus=self.data.stim[stim]['map'], 
+                                 **{k:v for k,v in parameters.items() if k not in ("threshold_change", "base_threshold")})
+             
             print(mp.current_process().name + ' LCA started ' + stim + ' ' + ', '.join(
-                [str(p) for p in parameters]) + ' ' + str(threshold))
+                [str(v) for v in parameters.values()]))
             #run the SLCA model and save the results
             coords, rt = lca.run_2dim(self.n_trials, self.trial_length)
             print(mp.current_process().name + ' LCA finished ' + stim + ' ' + ', '.join([str(p) for p in rt]))
@@ -101,7 +109,7 @@ class GA():
                 lca_smap = gaussian_filter(lca_map, sigma=1.5)
                 lca_smap = (lca_smap - np.min(lca_smap)) / (np.max(lca_smap) - np.min(lca_smap))
 
-            if len(metrics_temporal['all']) > 0:
+            if len(metric_temporal['all']) > 0:
                 all_rt.extend(rt)
 
             #iterate over participants
@@ -203,13 +211,15 @@ class GA():
         return np.array([res['params'] for res in results[best_inds]])
 
     def random_gen(self, sets_num):
-        return np.array([np.random.uniform(low=d[0], high=d[1], size=sets_num) for d in self.params_range]).T
+        gen = np.array([np.random.uniform(low=self.params_range[d][0], high=self.params_range[d][1], size=sets_num) for d in self.params_range]).T
+        gen[:,list(self.fixed.keys())] = list(self.fixed.values())
+        return gen
 
     def first_gen(self):
         return self.random_gen(self.gen_size)
 
     def mutate(self, set_params):
-        param_num = np.random.choice((1, 7))
+        param_num = np.random.choice(self.inds_unfixed)
         new_params = set_params.copy()
         new_params[param_num] *= np.random.choice([0.95, 1.05])
         if new_params[param_num] < self.params_range[param_num][0]:
@@ -219,7 +229,7 @@ class GA():
         return new_params
 
     def crossover(self, parent0, parent1):
-        cross_ind = np.random.choice((1, 7))
+        cross_ind = np.random.choice(self.unfixed_inds)
         child = parent0.copy()
         child[cross_ind] = parent1[cross_ind]
         return child
@@ -252,7 +262,7 @@ class GA():
         print(f'crossover shape, {gens_crossover.shape}')
 
         print('RANDOM')
-        gens_random = self.random_gen(self.n_desc())
+        gens_random = self.random_gen(self.n_desc)
         print(f'random shape, {gens_random.shape}')
 
         gens = np.concatenate([gens_best, gens_mutated, gens_crossover, gens_random])
