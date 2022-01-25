@@ -3,10 +3,10 @@ The modification of Leaky Competing Accumulator Model by Usher & McClelland (200
 
 ## The original model
 A model of spiking neural network, where each neuron accumulates input over time. The values of the neurons are updated with use of biologically inspired mechanisms:
-- information leakage
-- recurrent self-excitation
-- non-linearity
-- random noise
+- information leakage,
+- recurrent self-excitation,
+- non-linearity,
+- random noise.
 
 If you have eye-tracking data with coordinates and durations of human gaze, this model can simulate it. Our model can do it too 😉\
 The model has many parameters, which are stated in the description of the class `SLCA` in the file `src/slca.py` and further in *How to use*.
@@ -26,15 +26,15 @@ We trained and tested our model on the following experimental data: 46 participa
 Model can be used with the parameters that we found during optimization, or with any other parameters. If you want to try to find more optimal parameters - you need to complete the next step and retrain the model.
 
 If you just want to check it out - please run the `example.ipynb` file. **What you need**:
-- a pretrained saliency model
-- a picture to simulate the fixations on it
-- maybe some human RT data to evaluate the model performance
+- a pretrained saliency model,
+- a picture to simulate the fixations on it,
+- maybe some human RT data to evaluate the model performance.
     
 **What you get**:
-- a saliency map
-- a sequence of the fixation durations
-- a simple graph which shows their distribution
-- if you provided the human data, then also its comparison to the simulated data
+- a saliency map,
+- a sequence of the fixation durations,
+- a simple graph which shows their distribution,
+- if you provided the human data, then also its comparison to the simulated data.
 
 ## How to train
 1) Install all required libraries from the `requirements.txt`.
@@ -89,10 +89,10 @@ If you just want to check it out - please run the `example.ipynb` file. **What y
         }
         ```
         
-        - **n_generations**: *int*, the amount of epochs/generations for the genetic algorithm to train on
-        - **gen_size**: *int*, the amount of the descendants in one generation
-        - **model type**: *string*, type of lateral inhibition, can be **global** or **local**
-        - **participants**: *list*, list of the indices of the participants whose data you want to use. If no indices are specified, then the entire dataset is used.
+        - **n_generations**: *int*, the amount of epochs/generations for the genetic algorithm to train on,
+        - **gen_size**: *int*, the amount of the descendants in one generation,
+        - **model type**: *string*, type of lateral inhibition, can be **global** or **local**,
+        - **participants**: *list*, list of the indices of the participants whose data you want to use. If no indices are specified, then the entire dataset is used,
         - **metrics**: a 3-level *dictionary*, contains names of metrics to evaluate the performance.\
             Available metrics: 
             + **ks** - Kolmogorov-Smirnov non-parametric test, a temporal metric, can be either used on *all* data, i.e. first data is simulated for all images and participants, then combined, and after that 500 random samples are taken from this combined data and from human combined data. These samples are compared to each other. Or it can be used as *ind*, i.e. calculated for each image and participant separately and then averaged.
@@ -107,9 +107,9 @@ If you just want to check it out - please run the `example.ipynb` file. **What y
             "desired_res": [120, 68]
         }
         ```
-        - **trial_length**: *int*, length of a single simulated trial
-        - **n_trials**: *int*, the amount of trials simulated for one image
-        - **desired_res**: *tuple*, the expected resolution for a saliency map
+        - **trial_length**: *int*, length of a single simulated trial,
+        - **n_trials**: *int*, the amount of trials simulated for one image,
+        - **desired_res**: *tuple*, the expected resolution for a saliency map.
             
             
     * In `slca_parameters_range.json` we should specify range of values for **all** the parameters. If values of any of these parameters are changed during the optimization, they should stay in their range.
@@ -127,16 +127,16 @@ If you just want to check it out - please run the `example.ipynb` file. **What y
              "threshold": [0.05, 1.5]
          }
          ```
-        - **dt_t**: the time step size
-        - **leak**: the leakage term
-        - **competition**: the strength of lateral inhibition across accumulators
-        - **self_excit**: self excitation of the accumulator
-        - **w_input**: input strengh of the feedforward weights
-        - **w_cross**: cross talk of the feedforward weights
-        - **offset**: the additive drift term of the SLCA process
-        - **noise_sd**: the sd of the noise term of the LCA process
-        - **base_threshold**: the base activation threshold  
-        - **threshold_change**: how much the activation threshold depends on overall image saliency
+        - **dt_t**: the time step size,
+        - **leak**: the leakage term,
+        - **competition**: the strength of lateral inhibition across accumulators,
+        - **self_excit**: self excitation of the accumulator,
+        - **w_input**: input strengh of the feedforward weights,
+        - **w_cross**: cross talk of the feedforward weights,
+        - **offset**: the additive drift term of the SLCA process,
+        - **noise_sd**: the sd of the noise term of the LCA process,
+        - **base_threshold**: the base activation threshold,
+        - **threshold_change**: how much the activation threshold depends on overall image saliency.
          
     * In `slca_parameters_init.json` we should initialize the arbitrary amount of values for some of the parameters. We just don't want to start with all random.
         
