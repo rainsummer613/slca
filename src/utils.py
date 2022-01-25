@@ -89,7 +89,7 @@ class GA_ParamsLoader(ParamsLoader):
     def _parse_params(self, params):
         n_generations, gen_size, model_type, participants, metrics = params.values()
         if gen_size % 4 != 0:
-            raise Exception('The amount of the descendants in one generation should be a multiple of 4. Please check the parameter gen_size in the file {self.filename}.json')
+            raise Exception(f'The amount of the descendants in one generation should be a multiple of 4. Please check the parameter gen_size in the file {self.filename}.json')
         
         if model_type == 'local':
             lca_model = SLCA_local
@@ -107,14 +107,14 @@ class GA_ParamsLoader(ParamsLoader):
                 #if user specified an unknown metric in the ga_parameters.json file
                 for metric in metrics[metric_group_1][metric_group_2]:
                     if metric not in self.available_metrics:
-                        raise Exception(get_metric_exception_row(self.available_metrics, 'Only the following metrics are available for the parameter metrics in the file {self.filename}.json:'))
+                        raise Exception(get_metric_exception_row(self.available_metrics, f'Only the following metrics are available for the parameter metrics in the file {self.filename}.json:'))
                     
                     metric_methods[metric_group_1][metric_group_2][metric] = self.available_metrics[metric]['method']                
                     n_metrics += 1
         
         #if user did not specify any metric in the ga_parameters.json file
         if n_metrics == 0:
-            raise Exception(get_metric_exception_row(self.available_metrics, 'Please specify at least one of the following metrics in the file {self.filename}.json:'))
+            raise Exception(get_metric_exception_row(self.available_metrics, f'Please specify at least one of the following metrics in the file {self.filename}.json:'))
         
         if len(participants) == 0:
             participants = list(range(1,47))
