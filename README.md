@@ -60,10 +60,10 @@ We trained and tested our model on the following experimental data: 46 participa
         - **metrics**: a 3-level *dictionary*, contains names of metrics to evaluate the performance.\
             Available metrics: 
             + **ks** - Kolmogorov-Smirnov non-parametric test, a temporal metric, can be either used on *all* data, i.e. first data is simulated for all images and participants, then combined, and after that 500 random samples are taken from this combined data and from human combined data. These samples are compared to each other. Or it can be used as *ind*, i.e. calculated for each image and participant separately and then averaged.
-            + **aj** - AUC-Judd test for evaluating the saliency map, a sptial metric, better use on *sal* data, i.e. on simulated saliency maps.
-            <br>
-            
-                ```
+            + **aj** - AUC-Judd test for evaluating the saliency map, a sptial metric, better use on *sal* data, i.e. on simulated saliency maps.\
+            Please follow the structure of the file:
+
+            ```
                 {
                 "n_generations": 100,
                 "gen_size": 12,
@@ -83,7 +83,8 @@ We trained and tested our model on the following experimental data: 46 participa
                         }
                     }
                 }
-                ```
+             ```
+            
     * In `ga_parameters_range.json` we specified the range for some important parameters. If/when these values are changed during the optimization process, they should stay in their range.
         
         - **leak**: the leakage term
@@ -93,11 +94,11 @@ We trained and tested our model on the following experimental data: 46 participa
         - **w_cross**: cross talk of the feedforward weights
         - **offset**: the additive drift term of the SLCA process
         - **noise_sd**: the sd of the noise term of the LCA process
-        - **threshold**: the activation threshold
-         <br>    
-         
-             ```
-             {
+        - **threshold**: the activation threshold\
+       Please follow the structure of the file:
+
+        ```
+        {
              "leak": [0.1, 0.5],
              "competition": [0.0005, 1.0],
              "self_excit": [0.05, 0.5],
@@ -106,8 +107,8 @@ We trained and tested our model on the following experimental data: 46 participa
              "offset": [0.0, 10.0],
              "noise_sd": [0.2, 5.0],
              "threshold": [0.05, 1.5]
-             }
-             ```
+         }
+         ```
         
 ## References
 * Jia, S., & Bruce, N. D. (2020). EML-NET: An expandable multi-layer network for saliency prediction. *Image and Vision Computing*, 103887. https://doi.org/10.1016/j.imavis.2020.103887.
