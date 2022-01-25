@@ -1,0 +1,6 @@
+{
+    "dt_t": 0.01,
+    "threshold": 5.0,
+    "trial_length": 750,
+    "n_trials": 40
+}
