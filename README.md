@@ -23,7 +23,7 @@ We trained and tested our model on the following experimental data: 46 participa
 <br>
 
 ## How to use
-Model can be used with the parameters that we found during optimization or with any other parameters. If you want to try to find more optimal parameters - you need to complete the next step and retrain the model.\
+Model can be used with the parameters that we found during optimization, or with any other parameters. If you want to try to find more optimal parameters - you need to complete the next step and retrain the model.
 
 If you just want to check it out - please run the `example.ipynb` file. What you need:
     - a pre-trained saliency model
