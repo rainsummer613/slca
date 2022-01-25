@@ -59,7 +59,7 @@ class GA():
         
         self.params_range = params_range
         self.fixed = fixed
-        self.unfixed_inds =tuple(set(range(len(self.params_range))) - set(fixed.keys()))
+        self.unfixed_inds = tuple(set(range(len(self.params_range))) - set(fixed.keys()))
         self.param_to_index = param_to_index
         self.index_to_param = index_to_param
         
@@ -79,37 +79,39 @@ class GA():
             an array with the model parameters
         """
         all_rt, all_human_rt = [], []
-        res_spatial, res_temporal = {}, {}
+        res = {}
 
         #iterate over stimulus images
         for stim in list(self.data.stim.keys()):
             salient = self.data.stim[stim]['salient']
             
-            parameters = {self.index_to_param[i]: v for i, v in enumerate(parameters)}
-            parameters["threshold"] = parameters["base_threshold"] + salient * parameters["threshold_change"]
-            print("new threshold", parameters["threshold"])
+            #slca requires a single treshold parameter, but we also want to keep both threshold and threshold_change for optimization
+            parameters_lca = {self.index_to_param[i]:v for i,v in enumerate(parameters)}
+            parameters_lca["threshold"] += salient * parameters[self.param_to_index["threshold_change"]]
+            parameters_lca.pop("threshold_change")
+            print("new threshold", parameters_lca["threshold"])
 
             #initialize an SLCA model
-            lca = self.lca_model(stimulus=self.data.stim[stim]['map'], 
-                                 **{k:v for k,v in parameters.items() if k not in ("threshold_change", "base_threshold")})
+            lca = self.lca_model(stimulus=self.data.stim[stim]['map'], params_range=self.params_range, **parameters_lca)
              
-            print(mp.current_process().name + ' LCA started ' + stim + ' ' + ', '.join(
-                [str(v) for v in parameters.values()]))
+            print(mp.current_process().name + ' LCA started ' + stim + ' ' + ', '.join([str(v) for v in parameters]))
             #run the SLCA model and save the results
             coords, rt = lca.run_2dim(self.n_trials, self.trial_length)
             print(mp.current_process().name + ' LCA finished ' + stim + ' ' + ', '.join([str(p) for p in rt]))
 
             trial_coord = np.array(coords, dtype=np.float32)
+            trials_h = list(trial_coord // lca.w)
+            trials_w = list(trial_coord % lca.w)
 
             lca_map = np.zeros(shape=(lca.h, lca.w), dtype=np.float32)
             for i in range(len(rt)):
-                lca_map[lca.h, lca.w] = rt[i]
+                lca_map[int(trials_h[i]), int(trials_w[i])] = rt[i]
                 
-            if len(metric_spatial['sal']) > 0:
+            if len(self.metric_spatial['sal']) > 0:
                 lca_smap = gaussian_filter(lca_map, sigma=1.5)
                 lca_smap = (lca_smap - np.min(lca_smap)) / (np.max(lca_smap) - np.min(lca_smap))
 
-            if len(metric_temporal['all']) > 0:
+            if len(self.metric_temporal['all']) > 0:
                 all_rt.extend(rt)
 
             #iterate over participants
@@ -219,7 +221,7 @@ class GA():
         return self.random_gen(self.gen_size)
 
     def mutate(self, set_params):
-        param_num = np.random.choice(self.inds_unfixed)
+        param_num = np.random.choice(self.unfixed_inds)
         new_params = set_params.copy()
         new_params[param_num] *= np.random.choice([0.95, 1.05])
         if new_params[param_num] < self.params_range[param_num][0]:

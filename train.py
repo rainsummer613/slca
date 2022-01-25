@@ -8,9 +8,9 @@ if __name__ == '__main__':
     parser.add_argument('--config', '-p', type=str, default='config', help='path to the folder with parameters and configurations') 
     parser.add_argument('--data', '-d', type=str, default='data', help='path to the data folder')
     
-    config = parser.parse_args()
-    data_folder = parser.data
-    parameter_folder = parser.config
+    args = parser.parse_args()
+    data_folder = args.data
+    parameter_folder = args.config
     
     basic_loader = ParamsLoader(parameter_folder)
     #parse the parameters of the genetic algorithm
@@ -32,7 +32,8 @@ if __name__ == '__main__':
             data=data, participants=participants, metrics=metrics, n_metrics=n_metrics, lca_model=lca_model,
             trial_length=trial_length, n_trials=n_trials)
     #initial parameter sets
-    params = np.zeros(shape=(gens_num, gen_size, len(params_range)))
+    params = np.zeros(shape=(gens_num, gen_size, len(basic_loader.all_params)))
+    print('init_params', params.shape)
     params[0] = ga.first_gen()
     
     for i, param_set in enumerate(params_init):

@@ -66,7 +66,7 @@ class ParamsLoader:
     def __init__(self, parameter_folder):
         self.parameter_folder = parameter_folder
         self.all_params = {'dt_t': 0, 'leak': 1, 'competition': 2, 'self_excit': 3, 'w_cross': 4, 'w_input': 5, 'offset': 6, 'noise_sd': 7, 
-                           'base_threshold': 8, 'threshold_change': 9}
+                           'threshold': 8, 'threshold_change': 9}
         
     def _parse_params(self, params):
         return params
@@ -132,51 +132,48 @@ class SLCA_ParamsInitLoader(ParamsLoader):
         
     def _parse_params(self, param_sets):
         for _, params in param_sets.items():
-            extra_params = set(params.keys()) - set(self.all_params.keys())
             
             if len(params) > len(set(params.keys())):
                 param_counter = Counter(list(params.leys()))
                 param_multiple = {p: param_counter[p] for p in param_counter if param_counter[k]>0}
                 raise Exception(f'Parameter(s) {param_multiple} is specified multiple times in file {self.filename}.json')
-            elif len(extra_params) > 0:
-                raise Exception(f'Extra unknown parameters in file {self.filename}.json: {extra_params}')
     
-        return [{self.all_params[p]: param_set[p] for p in param_set} for param_set in param_sets.values()]
+        return [{self.all_params[p]: param_set[p] for p in param_set if p in self.all_params} for param_set in param_sets.values()]
         
 class SLCA_ParamsRangeLoader(ParamsLoader):
     def __init__(self, parameter_folder):
         super().__init__(parameter_folder)
-        
+        self.default_range = {"dt_t": [0.0, 1.0],
+                              "leak": [0.1, 0.5],
+                              "competition": [0.0005, 1.0],
+                              "self_excit": [0.05, 0.5],
+                              "w_input": [0.1, 0.9],
+                              "w_cross": [0.2, 1.0],
+                              "offset": [0.0, 10.0],
+                              "noise_sd": [0.2, 5.0],
+                              "threshold": [2.0, 25.0],
+                              "threshold_change": [0.0, 5.0]}
+     
     def _parse_params(self, params):
-        extra_params = set(params.keys()) - set(self.all_params.keys())
-        missed_params = set(self.all_params.keys()) - set(params.keys())
-        
         if len(params) > len(set(params.keys())):
             param_counter = Counter(list(params.leys()))
             param_multiple = {p: param_counter[p] for p in param_counter if param_counter[k]>0}
             raise Exception(f'Parameter(s) {param_multiple} is specified multiple times in file {self.filename}.json')
-        elif len(extra_params) > 0:
-            raise Exception(f'Extra unknown parameters in file {self.filename}.json: {extra_params}')
-        elif len(missed_params) > 0:
-            raise Exception(f'Please specify missing parameter(s) {missed_params} in file {self.filename}.json')
-        
-        return params
+        for param in params:
+            if param in self.default_range:
+                self.default_range[param] = params[param]
+        return self.default_range
         
 class SLCA_ParamsFixedLoader(ParamsLoader):
     def __init__(self, parameter_folder):
         super().__init__(parameter_folder)
         
     def _parse_params(self, params):
-        extra_params = set(params.keys()) - set(self.all_params.keys())
-        
         if len(params) > len(set(params.keys())):
             param_counter = Counter(list(params.leys()))
             param_multiple = {p: param_counter[p] for p in param_counter if param_counter[k]>0}
             raise Exception(f'Parameter(s) {param_multiple} is specified multiple times in file {self.filename}.json')
-        elif len(extra_params) > 0:
-            raise Exception(f'Extra unknown parameters in file {self.filename}.json: {extra_params}')
-        
-        return {self.all_params[p]: params[p] for p in params}
+        return {self.all_params[p]: params[p] for p in params if p in self.all_params}
         
 def get_metric_exception_row(available_metrics, exception_start):
     exception_row = exception_start

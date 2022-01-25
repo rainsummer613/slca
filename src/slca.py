@@ -15,7 +15,7 @@ class SLCA():
     The leaky competing accumulator class in numpy
     """
     def __init__(
-            self, stimulus, dt_t=0.01, leak=0.2, competition=0, self_excit=0,
+            self, stimulus, params_range, dt_t=0.01, leak=0.2, competition=0, self_excit=0,
             w_input=1, w_cross=0, offset=0, noise_sd=0, threshold=5.0):
         """
         Initialize a leaky competing accumulator.
@@ -24,6 +24,8 @@ class SLCA():
         ----------
         stimulus : np.ndarray
             the stimulus image
+        params_range : dict
+            range of parameters
         dt_t : float
             the dt / tao term, representing the time step size
         leak : float
@@ -56,21 +58,53 @@ class SLCA():
         self.offset = offset
         self.noise_sd = noise_sd
         # check params
-        self._check_model_config()
+        self._check_model_config(params_range)
         
-    def _check_model_config(self):
-        if 0 >= self.leak:
-            self.leak = 0.05
-        if 0 >= self.competition:
-            self.competition = 0.05
-        if 0 >= self.self_excit:
-            self.self_excit = 0.1
-        if 0 >= self.dt_t:
-            self.dt_t = 0.01
-        if 0 >= self.noise_sd:
-            self.noise_sd = 0.05
-        if 0 >= self.threshold:
-            self.threshold = 10
+    def _check_model_config(self, params_range):
+        if params_range['dt_t'][0] > self.dt_t: 
+            self.dt_t = params_range['dt_t'][0]
+        elif self.dt_t > params_range['dt_t'][1]:
+            self.dt_t = params_range['dt_t'][1]
+            
+        if params_range['leak'][0] > self.leak: 
+            self.leak = params_range['leak'][0]
+        elif self.leak > params_range['leak'][1]:
+            self.leak = params_range['leak'][1]
+            
+        if params_range['competition'][0] > self.competition: 
+            self.competition = params_range['competition'][0]
+        elif self.competition > params_range['competition'][1]:
+            self.competition = params_range['competition'][1]        
+            
+        if params_range['self_excit'][0] > self.self_excit: 
+            self.self_excit = params_range['self_excit'][0]
+        elif self.self_excit > params_range['self_excit'][1]:
+            self.self_excit = params_range['self_excit'][1]  
+            
+        if params_range['w_input'][0] > self.w_input: 
+            self.w_input = params_range['w_input'][0]
+        elif self.w_input > params_range['w_input'][1]:
+            self.w_input = params_range['w_input'][1] 
+            
+        if params_range['w_cross'][0] > self.w_cross: 
+            self.w_cross = params_range['w_cross'][0]
+        elif self.w_cross > params_range['w_cross'][1]:
+            self.w_cross = params_range['w_cross'][1] 
+            
+        if params_range['noise_sd'][0] > self.noise_sd: 
+            self.noise_sd = params_range['noise_sd'][0]
+        elif self.noise_sd > params_range['noise_sd'][1]:
+            self.noise_sd = params_range['noise_sd'][1] 
+            
+        if params_range['offset'][0] > self.offset: 
+            self.offset = params_range['offset'][0]
+        elif self.offset > params_range['offset'][1]:
+            self.offset = params_range['offset'][1] 
+
+        if params_range['threshold'][0] > self.threshold: 
+            self.threshold = params_range['threshold'][0]
+        elif self.threshold > params_range['threshold'][1]:
+            self.threshold = params_range['threshold'][1]             
             
     def make_weights(self, diag_val, offdiag_val):
         """
@@ -122,10 +156,10 @@ class SLCA_global(SLCA):
     """
 
     def __init__(
-            self, stimulus, dt_t=0.01, leak=0.2, competition=1, self_excit=1,
+            self, stimulus, params_range, dt_t=0.01, leak=0.2, competition=1, self_excit=1,
             w_input=1, w_cross=0, offset=0, noise_sd=0, threshold=1):
         super().__init__(
-            stimulus=stimulus, dt_t=dt_t, leak=leak, competition=competition, self_excit=self_excit,
+            stimulus=stimulus, params_range=params_range, dt_t=dt_t, leak=leak, competition=competition, self_excit=self_excit,
             w_input=w_input, w_cross=w_cross, offset=offset, noise_sd=noise_sd, threshold=threshold)
         # the input / recurrent weights
         self.W_i = self.make_weights(self.w_input, self.w_cross)
@@ -159,10 +193,10 @@ class SLCA_local(SLCA):
     """
 
     def __init__(
-            self, stimulus, dt_t=0.01, leak=0.2, competition=1, self_excit=1,
+            self, stimulus, params_range, dt_t=0.01, leak=0.2, competition=1, self_excit=1,
             w_input=1, w_cross=0, offset=0, noise_sd=0, threshold=1):
         super().__init__(
-            stimulus=stimulus, dt_t=dt_t, leak=leak, competition=competition, self_excit=self_excit,
+            stimulus=stimulus, params_range=params_range, dt_t=dt_t, leak=leak, competition=competition, self_excit=self_excit,
             w_input=w_input, w_cross=w_cross, offset=offset, noise_sd=noise_sd, threshold=threshold)
         # the input / recurrent weights
         self.W_i = self.make_weights(self.w_input, self.w_cross)
