@@ -37,8 +37,6 @@ If you just want to check it out - please run the `example.ipynb` file. **What y
 - a simple graph which shows their distribution,
 - if you provided the human data, then also its comparison to the simulated data.
 
-![image](https://user-images.githubusercontent.com/32509711/150930366-83dd2874-6e44-4679-b1b7-44e3b5df9389.png)
-
 ## How to train
 1) Install all required libraries from the `requirements.txt`.
 2) Prepare your **training data**. Create a `data` folder which contains 3 things: files `all_coords.json` (`data/all_coords.json`) and `all_rts.json` (`data/all_rts.json`), and directory `smaps` (`data/smaps`). 
