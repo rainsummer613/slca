@@ -5,7 +5,7 @@ from src.utils import *
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config', '-p', default='config', help='path to the folder with parameters and configurations') 
+    parser.add_argument('--config', '-p', type=str, default='config', help='path to the folder with parameters and configurations') 
     parser.add_argument('--data', '-d', type=str, default='data', help='path to the data folder')
     
     config = parser.parse_args()
