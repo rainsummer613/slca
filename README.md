@@ -19,7 +19,7 @@ The model has many parameters, which are stated in the description of the class 
 ## Our data
 We trained and tested our model on the following experimental data: 46 participants had to search real photos of scenes for multiple instances of either cup or picture. These images were taken from the LabelMe dataset (Russell et al., 2008), which provides images of indoor and outdoor scenes. Data were collected using an eye tracker EyeLink 1000+, with the sampling rate  1000 Hz. Fixation detection was set to a velocity threshold of 35 degrees per second. In addition to that, the fixations with RT <100 and >750 ms were dropped as outliers. The detailed description of the data collection process was provided in (Merzon et al, 2019)\
 <br>
-**In simple words**: we recorded the gaze of the participants, while they were searching for a cup or a picture on the image from the LabelMe dataset. When they fixated at some point, we recorded the spatial coordinates of this point and how long the participant was looking at it.
+🌸 **In simple words**: we recorded the gaze of the participants, while they were searching for a cup or a picture on the image from the LabelMe dataset. When they fixated at some point, we recorded the spatial coordinates of this point and how long the participant was looking at it.
 <br>
 
 ## How to use
@@ -149,7 +149,7 @@ We trained and tested our model on the following experimental data: 46 participa
             "base_threshold": 5.0
         }
         ```
-  6. Good job! Now you can run `train.py` and wait until optimization is complete.
+  6. 💪 Good job! Now you can run `train.py` and wait until optimization is complete.
         
 ## References
 * Jia, S., & Bruce, N. D. (2020). EML-NET: An expandable multi-layer network for saliency prediction. *Image and Vision Computing*, 103887. https://doi.org/10.1016/j.imavis.2020.103887.
