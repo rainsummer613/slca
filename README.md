@@ -25,16 +25,16 @@ We trained and tested our model on the following experimental data: 46 participa
 ## How to use
 Model can be used with the parameters that we found during optimization, or with any other parameters. If you want to try to find more optimal parameters - you need to complete the next step and retrain the model.
 
-If you just want to check it out - please run the `example.ipynb` file. What you need:
-        * a pre-trained saliency model
-        * a picture to simulate the fixations on it
-        * maybe some human RT data to evaluate the model performance
+If you just want to check it out - please run the `example.ipynb` file. **What you need**:
+- a pretrained saliency model
+- a picture to simulate the fixations on it
+- maybe some human RT data to evaluate the model performance
     
- What you get:
-    * a saliency map
-    * a sequence of the fixation durations
-    * a simple graph which shows their distribution
-    * if you provided the human data, then also its comparison to the simulated data
+**What you get**:
+- a saliency map
+- a sequence of the fixation durations
+- a simple graph which shows their distribution
+- if you provided the human data, then also its comparison to the simulated data
 
 ## How to train
 1) Install all required libraries from the `requirements.txt`.
