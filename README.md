@@ -89,10 +89,10 @@ If you just want to check it out - please run the `example.ipynb` file. **What y
         }
         ```
         
-        - **n_generations**: *int*, the amount of epochs/generations for the genetic algorithm to train on,
-        - **gen_size**: *int*, the amount of the descendants in one generation,
-        - **model type**: *string*, type of lateral inhibition, can be **global** or **local**,
-        - **participants**: *list*, list of the indices of the participants whose data you want to use. If no indices are specified, then the entire dataset is used,
+        - **n_generations**: *int*, the amount of epochs/generations for the genetic algorithm to train on.
+        - **gen_size**: *int*, the amount of the descendants in one generation.
+        - **model type**: *string*, type of lateral inhibition, can be **global** or **local**.
+        - **participants**: *list*, list of the indices of the participants whose data you want to use. If no indices are specified, then the entire dataset is used.
         - **metrics**: a 3-level *dictionary*, contains names of metrics to evaluate the performance.\
             Available metrics: 
             + **ks** - Kolmogorov-Smirnov non-parametric test, a temporal metric, can be either used on *all* data, i.e. first data is simulated for all images and participants, then combined, and after that 500 random samples are taken from this combined data and from human combined data. These samples are compared to each other. Or it can be used as *ind*, i.e. calculated for each image and participant separately and then averaged.
