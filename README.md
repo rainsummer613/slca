@@ -63,27 +63,27 @@ We trained and tested our model on the following experimental data: 46 participa
             + **aj** - AUC-Judd test for evaluating the saliency map, a sptial metric, better use on *sal* data, i.e. on simulated saliency maps.
             <br>
             
-            ```
-            {
-            "n_generations": 100,
-            "gen_size": 12,
-            "model_type": "local",
-            "participants": [],
-            "metrics": 
+                ```
                 {
-                "spatial":
+                "n_generations": 100,
+                "gen_size": 12,
+                "model_type": "local",
+                "participants": [],
+                "metrics": 
                     {
-                    "raw": [],
-                    "sal": []
-                    },
-                "temporal":
-                    {
-                    "all": [],
-                    "ind": ["ks"]
+                    "spatial":
+                        {
+                        "raw": [],
+                        "sal": []
+                        },
+                    "temporal":
+                        {
+                        "all": [],
+                        "ind": ["ks"]
+                        }
                     }
                 }
-            }
-        ```
+                ```
     * In `ga_parameters_range.json` we specified the range for some important parameters. If/when these values are changed during the optimization process, they should stay in their range.
         
         - **leak**: the leakage term
@@ -95,18 +95,19 @@ We trained and tested our model on the following experimental data: 46 participa
         - **noise_sd**: the sd of the noise term of the LCA process
         - **threshold**: the activation threshold
          <br>    
-         ```
-         {
-         "leak": [0.1, 0.5],
-         "competition": [0.0005, 1.0],
-         "self_excit": [0.05, 0.5],
-         "w_input": [0.1, 0.9],
-         "w_cross": [0.2, 1.0],
-         "offset": [0.0, 10.0],
-         "noise_sd": [0.2, 5.0],
-         "threshold": [0.05, 1.5]
-         }
-         ```
+         
+             ```
+             {
+             "leak": [0.1, 0.5],
+             "competition": [0.0005, 1.0],
+             "self_excit": [0.05, 0.5],
+             "w_input": [0.1, 0.9],
+             "w_cross": [0.2, 1.0],
+             "offset": [0.0, 10.0],
+             "noise_sd": [0.2, 5.0],
+             "threshold": [0.05, 1.5]
+             }
+             ```
         
 ## References
 * Jia, S., & Bruce, N. D. (2020). EML-NET: An expandable multi-layer network for saliency prediction. *Image and Vision Computing*, 103887. https://doi.org/10.1016/j.imavis.2020.103887.
