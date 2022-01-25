@@ -60,29 +60,29 @@ We trained and tested our model on the following experimental data: 46 participa
         - **metrics**: a 3-level *dictionary*, contains names of metrics to evaluate the performance.\
             Available metrics: 
             + **ks** - Kolmogorov-Smirnov non-parametric test, a temporal metric, can be either used on *all* data, i.e. first data is simulated for all images and participants, then combined, and after that 500 random samples are taken from this combined data and from human combined data. These samples are compared to each other. Or it can be used as *ind*, i.e. calculated for each image and participant separately and then averaged.
-            + **aj** - AUC-Judd test for evaluating the saliency map, a sptial metric, better use on *sal* data, i.e. on simulated saliency maps.  
-              
-            ```
-                {
-                "n_generations": 100,
-                "gen_size": 12,
-                "model_type": "local",
-                "participants": [],
-                "metrics": 
+            + **aj** - AUC-Judd test for evaluating the saliency map, a sptial metric, better use on *sal* data, i.e. on simulated saliency maps.
+            
+         ```
+        {
+        "n_generations": 100,
+        "gen_size": 12,
+        "model_type": "local",
+        "participants": [],
+        "metrics": 
+            {
+            "spatial":
                     {
-                    "spatial":
-                        {
-                        "raw": [],
-                        "sal": []
-                        },
-                    "temporal":
-                        {
-                        "all": [],
-                        "ind": ["ks"]
-                        }
-                    }
+                "raw": [],
+                "sal": []
+                },
+            "temporal":
+                {
+                "all": [],
+                "ind": ["ks"]
                 }
-             ```
+            }
+        }
+        ```
             
     * In `ga_parameters_range.json` we specified the range for some important parameters. If/when these values are changed during the optimization process, they should stay in their range.
         
