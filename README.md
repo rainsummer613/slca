@@ -8,7 +8,7 @@ A model of spiking neural network, where each neuron accumulates input over time
 - non-linearity
 - random noise
 
-If you have eye-tracking data with coordinates and durations of human gaze, this model can try to simulate it. Our model can do it too 😉\
+If you have eye-tracking data with coordinates and durations of human gaze, this model can simulate it. Our model can do it too 😉\
 The model has many parameters, which are stated in the description of the class `SLCA` in the file `src/slca.py` and further in *How to use*.
 
 ## What we added
