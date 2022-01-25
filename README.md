@@ -52,16 +52,7 @@ We trained and tested our model on the following experimental data: 46 participa
 **Important!** Names of the files with saliency maps should be derived from the names of the original images, e.g. `image1.jpg` > `image1_smap.png`.
 5) Prepare configuration files for training a model. There are 4 config files in total: `ga_parameters.json`, `slca_parameters_sim.json`, `slca_parameters_fixed.json`,  `slca_parameters_init.json`, `slca_parameters_range.json`. Let's describe all of them! 
     * In `ga_parameters.json` we specified main parameters for running the entire training procedure. 
-        
-        - **n_generations**: *int*, the amount of epochs/generations for the genetic algorithm to train on
-        - **gen_size**: *int*, the amount of the descendants in one generation
-        - **model type**: *string*, type of lateral inhibition, can be **global** or **local**
-        - **participants**: *list*, list of the indices of the participants whose data you want to use. If no indices are specified, then the entire dataset is used.
-        - **metrics**: a 3-level *dictionary*, contains names of metrics to evaluate the performance.\
-            Available metrics: 
-            + **ks** - Kolmogorov-Smirnov non-parametric test, a temporal metric, can be either used on *all* data, i.e. first data is simulated for all images and participants, then combined, and after that 500 random samples are taken from this combined data and from human combined data. These samples are compared to each other. Or it can be used as *ind*, i.e. calculated for each image and participant separately and then averaged.
-            + **aj** - AUC-Judd test for evaluating the saliency map, a sptial metric, better use on *sal* data, i.e. on simulated saliency maps.
-            
+    
         ```
         {
             "n_generations": 100,
@@ -84,6 +75,15 @@ We trained and tested our model on the following experimental data: 46 participa
         }
         ```
         
+        - **n_generations**: *int*, the amount of epochs/generations for the genetic algorithm to train on
+        - **gen_size**: *int*, the amount of the descendants in one generation
+        - **model type**: *string*, type of lateral inhibition, can be **global** or **local**
+        - **participants**: *list*, list of the indices of the participants whose data you want to use. If no indices are specified, then the entire dataset is used.
+        - **metrics**: a 3-level *dictionary*, contains names of metrics to evaluate the performance.\
+            Available metrics: 
+            + **ks** - Kolmogorov-Smirnov non-parametric test, a temporal metric, can be either used on *all* data, i.e. first data is simulated for all images and participants, then combined, and after that 500 random samples are taken from this combined data and from human combined data. These samples are compared to each other. Or it can be used as *ind*, i.e. calculated for each image and participant separately and then averaged.
+            + **aj** - AUC-Judd test for evaluating the saliency map, a sptial metric, better use on *sal* data, i.e. on simulated saliency maps.
+        
     * In `slca_parameters_sim.json` we specified parameters for simulation which don't participate in the accumulator values update.
         
         - **trial_length**: *int*, length of a single simulated trial
@@ -99,16 +99,6 @@ We trained and tested our model on the following experimental data: 46 participa
         ```
             
     * In `slca_parameters_range.json` we should specify range of values for **all** the parameters. If values of any of these parameters are changed during the optimization, they should stay in their range.
-        - **dt_t**: the time step size
-        - **leak**: the leakage term
-        - **competition**: the strength of lateral inhibition across accumulators
-        - **self_excit**: self excitation of the accumulator
-        - **w_input**: input strengh of the feedforward weights
-        - **w_cross**: cross talk of the feedforward weights
-        - **offset**: the additive drift term of the SLCA process
-        - **noise_sd**: the sd of the noise term of the LCA process
-        - **base_threshold**: the base activation threshold  
-        - **threshold_change**: how much the activation threshold depends on overall image saliency
           
         ```
         {
@@ -123,6 +113,16 @@ We trained and tested our model on the following experimental data: 46 participa
              "threshold": [0.05, 1.5]
          }
          ```
+        - **dt_t**: the time step size
+        - **leak**: the leakage term
+        - **competition**: the strength of lateral inhibition across accumulators
+        - **self_excit**: self excitation of the accumulator
+        - **w_input**: input strengh of the feedforward weights
+        - **w_cross**: cross talk of the feedforward weights
+        - **offset**: the additive drift term of the SLCA process
+        - **noise_sd**: the sd of the noise term of the LCA process
+        - **base_threshold**: the base activation threshold  
+        - **threshold_change**: how much the activation threshold depends on overall image saliency
          
     * In `slca_parameters_init.json` we should initialize the arbitrary amount of values for some of the parameters. We just don't want to start with all random.
         
