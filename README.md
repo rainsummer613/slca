@@ -107,8 +107,8 @@ If you just want to check it out - please run the `example.ipynb` file. **What y
             "desired_res": [120, 68]
         }
         ```
-        - **trial_length**: *int*, length of a single simulated trial,
-        - **n_trials**: *int*, the amount of trials simulated for one image,
+        - **trial_length**: *int*, length of a single simulated trial.
+        - **n_trials**: *int*, the amount of trials simulated for one image.
         - **desired_res**: *tuple*, the expected resolution for a saliency map.
             
             
