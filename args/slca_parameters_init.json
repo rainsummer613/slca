@@ -20,6 +20,7 @@
     "threshold_change": 0.465
     }, 
 "2": {
+    "dt_t": 0.01,
     "leak": 0.256, 
     "competition": 0.8, 
     "self_excit": 0.25, 

@@ -1,0 +1,5 @@
+{
+    "trial_length": 750,
+    "n_trials": 40,
+    "desired_res": [120, 68]
+}
