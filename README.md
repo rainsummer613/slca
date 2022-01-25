@@ -20,7 +20,8 @@ The model has many parameters, which are stated in the description of the class 
 We trained and tested our model on the following experimental data: 46 participants had to search real photos of scenes for multiple instances of either cup or picture. These images were taken from the LabelMe dataset (Russell et al., 2008), which provides images of indoor and outdoor scenes. Data were collected using an eye tracker EyeLink 1000+, with the sampling rate  1000 Hz. Fixation detection was set to a velocity threshold of 35 degrees per second. In addition to that, the fixations with RT <100 and >750 ms were dropped as outliers. The detailed description of the data collection process was provided in (Merzon et al, 2019)\
 <br>
 🌸 **In simple words**: we recorded the gaze of the participants, while they were searching for a cup or a picture on the image from the LabelMe dataset. When they fixated at some point, we recorded the spatial coordinates of this point and how long the participant was looking at it.
-<br>
+
+![image](https://user-images.githubusercontent.com/32509711/150928717-d543b1bb-091c-4c06-9a4d-143f11604eea.png)
 
 ## How to use
 Model can be used with the parameters that we found during optimization, or with any other parameters. If you want to try to find more optimal parameters - you need to complete the next step and retrain the model.
@@ -35,6 +36,8 @@ If you just want to check it out - please run the `example.ipynb` file. **What y
 - a sequence of the fixation durations,
 - a simple graph which shows their distribution,
 - if you provided the human data, then also its comparison to the simulated data.
+
+![image](https://user-images.githubusercontent.com/32509711/150929891-34fd31a1-53b1-4455-9d4c-c4d98c153d62.png)
 
 ## How to train
 1) Install all required libraries from the `requirements.txt`.
