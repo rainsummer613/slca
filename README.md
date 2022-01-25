@@ -8,8 +8,8 @@ A model of spiking neural network, where each neuron accumulates input over time
 - non-linearity
 - random noise
 
-If you have eye-tracking data with coordinates and durations of human gaze, this model can try to simulate them. Our model can do it too, and possibly even better 😉\
-The model has many parameters, which are stated in the description of the class `SLCA` in the file `src/slca.py`.
+If you have eye-tracking data with coordinates and durations of human gaze, this model can try to simulate it. Our model can do it too 😉\
+The model has many parameters, which are stated in the description of the class `SLCA` in the file `src/slca.py` and further in the *How to use* section.
 
 ## What we added
 1) **Local lateral inhibition** - active neurons inhibit only their immediate neighbors. The original **global inhibition** is also implemented: each neuron inhibits all other neurons.
