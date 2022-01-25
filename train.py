@@ -9,8 +9,8 @@ if __name__ == '__main__':
     parser.add_argument('--data', '-d', type=str, default='data', help='path to the data folder')
     
     config = parser.parse_args()
-    data_folder = config.data
-    parameter_folder = config.parameters
+    data_folder = parser.data
+    parameter_folder = parser.config
     
     basic_loader = ParamsLoader(parameter_folder)
     #parse the parameters of the genetic algorithm
