@@ -5,12 +5,12 @@ from src.utils import *
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--parameters', '-p', default='args', help='path to the parameters folder') 
+    parser.add_argument('--config', '-p', default='config', help='path to the folder with parameters and configurations') 
     parser.add_argument('--data', '-d', type=str, default='data', help='path to the data folder')
     
-    args = parser.parse_args()
-    data_folder = args.data
-    parameter_folder = args.parameters
+    config = parser.parse_args()
+    data_folder = config.data
+    parameter_folder = config.parameters
     
     basic_loader = ParamsLoader(parameter_folder)
     #parse the parameters of the genetic algorithm
