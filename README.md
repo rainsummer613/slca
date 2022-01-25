@@ -86,10 +86,6 @@ We trained and tested our model on the following experimental data: 46 participa
         
     * In `slca_parameters_sim.json` we specified parameters for simulation which don't participate in the accumulator values update.
         
-        - **trial_length**: *int*, length of a single simulated trial
-        - **n_trials**: *int*, the amount of trials simulated for one image
-        - **desired_res**: *tuple*, the expected resolution for a saliency map
-            
         ```
         {
             "trial_length": 750,
@@ -97,6 +93,10 @@ We trained and tested our model on the following experimental data: 46 participa
             "desired_res": [120, 68]
         }
         ```
+        - **trial_length**: *int*, length of a single simulated trial
+        - **n_trials**: *int*, the amount of trials simulated for one image
+        - **desired_res**: *tuple*, the expected resolution for a saliency map
+            
             
     * In `slca_parameters_range.json` we should specify range of values for **all** the parameters. If values of any of these parameters are changed during the optimization, they should stay in their range.
           
