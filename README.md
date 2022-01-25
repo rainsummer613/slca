@@ -61,8 +61,7 @@ We trained and tested our model on the following experimental data: 46 participa
             Available metrics: 
             + **ks** - Kolmogorov-Smirnov non-parametric test, a temporal metric, can be either used on *all* data, i.e. first data is simulated for all images and participants, then combined, and after that 500 random samples are taken from this combined data and from human combined data. These samples are compared to each other. Or it can be used as *ind*, i.e. calculated for each image and participant separately and then averaged.
             + **aj** - AUC-Judd test for evaluating the saliency map, a sptial metric, better use on *sal* data, i.e. on simulated saliency maps.
-
-
+<br>
         ```
         {
         "n_generations": 100,
@@ -94,8 +93,7 @@ We trained and tested our model on the following experimental data: 46 participa
         - **offset**: the additive drift term of the SLCA process
         - **noise_sd**: the sd of the noise term of the LCA process
         - **threshold**: the activation threshold
-
-
+<br>
         ```
         {
         "leak": [0.1, 0.5],
