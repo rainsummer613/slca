@@ -13,7 +13,7 @@ if __name__ == '__main__':
     parameter_folder = args.parameters
     
     #parse the parameters of the genetic algorithm
-    gens_num, gen_size, model_type, participants, metrics, lca_model = GA_ParamsLoader(parameter_folder).load()
+    gens_num, gen_size, model_type, participants, metrics, n_metrics, lca_model = GA_ParamsLoader(parameter_folder).load()
     #parse static (fixed) parameters of the SLCA
     dt_t, threshold, trial_length, n_trials = SLCA_StaticParamsLoader(parameter_folder).load()
     #parse the parameters range of the SLCA
@@ -25,7 +25,7 @@ if __name__ == '__main__':
     
     #initialize the genetic algorithm
     ga = GA(gen_size=gen_size, n_trials=n_trials, trial_length=trial_length, dt_t=dt_t, threshold=threshold, params_range=params_range, 
-            data=data, participants=participants, metrics=metrics, lca_model=lca_model)
+            data=data, participants=participants, metrics=metrics, n_metrics=n_metrics, lca_model=lca_model)
     #initial parameter sets
     params = np.zeros(shape=(gens_num, gen_size, params_init.shape[1]))
     params[0] = ga.first_gen()

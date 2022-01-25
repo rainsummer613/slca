@@ -3,6 +3,7 @@ from matplotlib.image import imread
 import numpy as np
 import os
 
+from src.measure import *
 from src.slca import *
 
 class DataLoader:
@@ -74,14 +75,16 @@ class ParamsLoader:
 def get_metric_exception_row(available_metrics, exception_start):
     exception_row = exception_start
     for metric in self.available_metrics:
-        exception_row += f'\n{metric} - {self.available_metrics[metric]}'
+        exception_row += f"\n{metric} - {self.available_metrics[metric]['descr']}"
     return exception_row
            
 class GA_ParamsLoader(ParamsLoader):
     def __init__(self, parameter_folder):
         super().__init__(parameter_folder)
         self.filename = 'ga_parameters'
-        self.available_metrics = {'ks': 'Kolmogorov-Smirnov, a temporal metric', 'aj': 'AUC-Judd, a spatial metric'}
+        self.available_metrics = {'ks': {'descr': 'Kolmogorov-Smirnov, a temporal metric', 'method': KolmogorovSmirnov}, 
+                                  'aj': {'descr': 'AUC-Judd, a spatial metric', 'method': AucJudd}
+                                  }
     
     def _parse_params(self, params):
         n_generations, gen_size, model_type, participants, metrics = params.values()
@@ -95,25 +98,28 @@ class GA_ParamsLoader(ParamsLoader):
         else:
             raise Exception(f'Please specify one of the available types of the SLCA model: local or global (file {self.filename}.json, parameter model_type')
         
-        metric_names = []
+        n_metrics = 0
+        metric_methods = {}
         for metric_group_1 in metrics:
+            metric_methods[metric_group_1] = {}
             for metric_group_2 in metrics[metric_group_1]:
-
+                metric_methods[metric_group_1][metric_group_2] = {}
                 #if user specified an unknown metric in the ga_parameters.json file
                 for metric in metrics[metric_group_1][metric_group_2]:
                     if metric not in self.available_metrics:
                         raise Exception(get_metric_exception_row(self.available_metrics, 'Only the following metrics are available for the parameter metrics in the file {self.filename}.json:'))
-                
-                    metric_names.append(metric)
+                    
+                    metric_methods[metric_group_1][metric_group_2][metric] = self.available_metrics[metric]['method']                
+                    n_metrics += 1
         
         #if user did not specify any metric in the ga_parameters.json file
-        if len(metric_names) == 0:
+        if n_metrics == 0:
             raise Exception(get_metric_exception_row(self.available_metrics, 'Please specify at least one of the following metrics in the file {self.filename}.json:'))
         
         if len(participants) == 0:
             participants = list(range(1,47))
             
-        return n_generations, gen_size, model_type, participants, metrics, lca_model
+        return n_generations, gen_size, model_type, participants, metric_methods, n_metrics, lca_model
         
 class SLCA_StaticParamsLoader(ParamsLoader):
     def __init__(self, parameter_folder):

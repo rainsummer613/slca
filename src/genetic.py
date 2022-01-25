@@ -17,7 +17,7 @@ class GA():
     """
     The genetic algorithm class
     """
-    def __init__(self, data, participants, metrics, lca_model, params_range,
+    def __init__(self, data, participants, metrics, n_metrics, lca_model, params_range,
                  gen_size=12, n_trials=40, trial_length=750, dt_t=0.01, threshold=5.0, 
                  ):
         """
@@ -25,6 +25,8 @@ class GA():
         ----------
         metrics : dictionary
             a 3-level dictionary with various types of metrics
+        n_metrics : int
+            a precomputed total amount of metrics
         gen_size : int
             the amount of the descendants in one generation
         lca_model
@@ -47,6 +49,7 @@ class GA():
         """
         self.metric_spatial = metrics['spatial']
         self.metric_temporal = metrics['temporal']
+        self.n_metrics = n_metrics
         self.gen_size = gen_size
         self.n_desc = int(gen_size / 4)
         self.participants = participants
@@ -165,7 +168,7 @@ class GA():
         # fill with other variants if there are <3 optimal
         if len(best_inds) < self.n_desc():
             fits_sorted = np.array([ind for ind in np.mean(costs, axis=1).argsort() if ind not in best_inds])
-            best_inds = np.r_[best_inds, fits_sorted[:self.n_desc() - len(best_inds)]]
+            best_inds = np.r_[best_inds, fits_sorted[:self.n_desc - len(best_inds)]]
         return best_inds
 
     def select_best(self, sets):
@@ -188,9 +191,12 @@ class GA():
         fits = np.array([el['fitness'] for el in results])
         print(f'fits {len(fits)} {fits}')
 
-        # find pareto optimal
-        print('started computing pareto')
-        best_inds = self.find_pareto_efficient(fits)[:self.n_desc()]
+        # find best descendants
+        if self.n_metrics == 1:
+            best_inds = fits.argsort()[-self.n_desc:][::-1]
+        else:
+            print('started computing pareto')
+            best_inds = self.find_pareto_efficient(fits)[:self.n_desc]
 
         results = np.array(results)
         print(f'BEST RES: {results[best_inds]}')
