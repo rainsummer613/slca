@@ -113,7 +113,8 @@ If you just want to check it out - please run the `example.ipynb` file. **What y
         - **desired_res**: *tuple*, the expected resolution for a saliency map.
             
             
-    * In `slca_parameters_range.json` we should specify range of values for **all** the parameters. If values of any of these parameters are changed during the optimization, they should stay in their range.
+    * In `slca_parameters_range.json` we should specify range of values for the parameters. If values of any of these parameters are changed during the optimization, they should stay in their range.\
+    **Imporant!** The default values for all parameter ranges are pre-defined in the code. You can use them if you want. Only the ranges for parameters that you specified in the config file will override the default ones.
           
         ```
         {
@@ -125,7 +126,8 @@ If you just want to check it out - please run the `example.ipynb` file. **What y
              "w_cross": [0.2, 1.0],
              "offset": [0.0, 10.0],
              "noise_sd": [0.2, 5.0],
-             "threshold": [0.05, 1.5]
+             "threshold": [2.0, 10.0],
+             "threshold_change": [0.0, 5.0]
          }
          ```
         - **dt_t**: the time step size,
@@ -136,10 +138,10 @@ If you just want to check it out - please run the `example.ipynb` file. **What y
         - **w_cross**: cross talk of the feedforward weights,
         - **offset**: the additive drift term of the SLCA process,
         - **noise_sd**: the sd of the noise term of the LCA process,
-        - **base_threshold**: the base activation threshold,
+        - **threshold**: the activation threshold,
         - **threshold_change**: how much the activation threshold depends on overall image saliency.
          
-    * In `slca_parameters_init.json` we should initialize the arbitrary amount of values for some of the parameters. We just don't want to start with all random.
+    * In `slca_parameters_init.json` we should initialize the arbitrary amount of values for some of the parameters. If some parameter is missing in this config file, it will be initialized randomly (in a given range).
         
         ```
         {
@@ -156,12 +158,12 @@ If you just want to check it out - please run the `example.ipynb` file. **What y
          }
          ```
          
-    * In `slca_parameters_fixed.json` there values of the parameters which we don't want to optimize. They will stay the same through the entire training process. Scientists usually fix the parameters `dt_t` and `threshold` (`base_threshold` in our case) in models of this kind.
+    * In `slca_parameters_fixed.json` there values of the parameters which we don't want to optimize. They will stay the same through the entire training process. Scientists usually fix the parameters `dt_t` and `threshold` in models of this kind.
         
         ```
         {
             "dt_t": 0.01,
-            "base_threshold": 5.0
+            "threshold": 5.0
         }
         ```
   6. 💪 Good job! Now you can run `train.py` and wait until optimization is complete.
