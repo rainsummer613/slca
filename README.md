@@ -37,7 +37,7 @@ If you just want to check it out - please run the `example.ipynb` file. **What y
 - a simple graph which shows their distribution,
 - if you provided the human data, then also its comparison to the simulated data.
 
-![image](https://user-images.githubusercontent.com/32509711/150929891-34fd31a1-53b1-4455-9d4c-c4d98c153d62.png)
+![image](https://user-images.githubusercontent.com/32509711/150930366-83dd2874-6e44-4679-b1b7-44e3b5df9389.png)
 
 ## How to train
 1) Install all required libraries from the `requirements.txt`.
